@@ -1,4 +1,6 @@
-template<typename Domain, typename Comparator>
+#include "concepts.hpp"
+
+template<typename Domain, eop::Relation<Domain> Comparator>
 Domain const &select_2_4_ab_cd(Domain const &a,
   Domain const &b,
   Domain const &c,
@@ -11,7 +13,7 @@ Domain const &select_2_4_ab_cd(Domain const &a,
   }
 }
 
-template<typename Domain, typename Comparator>
+template<typename Domain, eop::Relation<Domain> Comparator>
 Domain const &select_2_4_ab(Domain const &a,
   Domain const &b,
   Domain const &c,
@@ -24,7 +26,7 @@ Domain const &select_2_4_ab(Domain const &a,
   }
 }
 
-template<typename Domain, typename Comparator>
+template<typename Domain, eop::Relation<Domain> Comparator>
 Domain const &select_2_4(Domain const &a,
   Domain const &b,
   Domain const &c,
