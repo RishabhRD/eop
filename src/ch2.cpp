@@ -2,7 +2,7 @@
 #include <concepts.hpp>
 #include <concepts>
 
-template<typename Domain, eop::Transformation<Domain> F, std::integral N>
+template<typename Domain, eop::transformation<Domain> F, std::integral N>
 constexpr auto power_unary(Domain x, N n, F f) -> Domain {
   while (n != N(0)) {
     n = n - N(1);

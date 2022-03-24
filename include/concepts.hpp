@@ -2,21 +2,22 @@
 
 namespace eop {
 template<typename Func, typename Domain>
-concept TransformationValue = requires(Domain d, Func func) {
+concept transformation = requires(Domain d, Func func) {
   { func(d) } -> std::same_as<Domain>;
 };
 
 template<typename Func, typename Domain>
-concept TransformationRef = requires(Domain const &d, Func func) {
-  { func(d) } -> std::same_as<Domain>;
+concept predicate = requires(Domain domain, Func func) {
+  { func(domain) } -> std::same_as<bool>;
 };
 
 template<typename Func, typename Domain>
-concept Transformation =
-  TransformationValue<Func, Domain> or TransformationRef<Func, Domain>;
-
-template<typename Func, typename Domain>
-concept Relation = requires(Domain const &d, Func func) {
+concept relation = requires(Domain const &d, Func func) {
   { func(d, d) } -> std::same_as<bool>;
+};
+
+template<typename Func, typename... Domain>
+concept callable_with = requires(Func func, Domain... domain) {
+  func(domain...);
 };
 }// namespace eop
