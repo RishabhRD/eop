@@ -15,4 +15,8 @@ int main() {
          - begin(vec),
       2));
   expect(stl::any_of(begin(vec), end(vec), [](auto num) { return num == 3; }));
+  expect(eq(
+    stl::reduce(
+      begin(vec), end(vec), 0, std::plus<int>{}, [](auto i) { return i + 1; }),
+    20));
 }

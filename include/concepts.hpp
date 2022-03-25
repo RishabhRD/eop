@@ -20,4 +20,10 @@ template<typename Func, typename... Domain>
 concept callable_with = requires(Func func, Domain... domain) {
   func(domain...);
 };
+
+template<typename Func, typename Return, typename... Domain>
+concept callable_with_return = requires(Func func, Domain... domain) {
+  { func(domain...) } -> std::same_as<Return>;
+};
+
 }// namespace eop
