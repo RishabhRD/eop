@@ -229,5 +229,60 @@ auto is_partitioned(Iter f, Iter l, Predicate p) {
   return none_of(find_if_not(f, l, p), l, p);
 }
 
+template<std::forward_iterator Iter,
+  eop::predicate<iterator::value_type<Iter>> Predicate>
+auto partition_point_n(Iter f, iterator::difference_type<Iter> n, Predicate p) {
+  while (n != 0) {
+    auto h = n / 2;
+    auto m = std::advance(f, h);
+    if (p(*m)) {
+      f = m;
+      ++f;
+      n = n - h + 1;
+    } else {
+      n = h;
+    }
+  }
+}
+
+template<std::forward_iterator Iter,
+  eop::predicate<iterator::value_type<Iter>> Predicate>
+auto partition_point(Iter f, Iter l, Predicate p) {
+  return partition_point_n(f, std::distance(f, l), p);
+}
+
+template<std::forward_iterator Iter,
+  eop::relation<iterator::value_type<Iter>> Comparator =
+    std::less<iterator::value_type<Iter>>>
+auto lower_bound(Iter f,
+  Iter l,
+  iterator::value_type<Iter> const &val,
+  Comparator comp = std::less<iterator::value_type<Iter>>{}) {
+  return partition_point(f, l, [&](auto const &ele) { return comp(ele, val); });
+}
+
+template<std::forward_iterator Iter,
+  eop::relation<iterator::value_type<Iter>> Comparator =
+    std::less<iterator::value_type<Iter>>>
+auto upper_bound(Iter f,
+  Iter l,
+  iterator::value_type<Iter> const &val,
+  Comparator comp = std::less<iterator::value_type<Iter>>{}) {
+  return partition_point(
+    f, l, [&](auto const &ele) { return !comp(val, ele); });
+}
+
+template<std::forward_iterator Iter,
+  eop::relation<iterator::value_type<Iter>> Comparator =
+    std::less<iterator::value_type<Iter>>>
+auto equal_range(Iter f,
+  Iter l,
+  iterator::value_type<Iter> const &val,
+  Comparator comp = std::less<iterator::value_type<Iter>>{}) {
+  auto left = lower_bound(f, l, val, comp);
+  auto right = upper_bound(left, l, val, comp);
+  return std::pair{ left, right };
+}
+
 
 };// namespace stl
